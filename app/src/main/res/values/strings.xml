@@ -1,0 +1,15 @@
+<resources>
+    <string name="app_name">fastmath2</string>
+    <string name="lvlTV">Lvl:</string>
+    <string name="goldTV">x</string>
+    <string name="silverTv">x</string>
+    <string name="bronzeTV">x</string>
+    <string name="topScoreTV">Total:</string>
+    <string name="achTitle">Your Achievements</string>
+    <string name="achStars">Star Totals</string>
+    <string name="muteTV">Mute</string>
+    <string name="profileSettingsTV">My Profile</string>
+    <string name="settingsAchieTV">Achievements</string>
+    <string name="signInTitleTextView">How would you like to sign in?</string>
+    <string name="fbTV">Facebook</string>
+</resources>

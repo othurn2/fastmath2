@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "31988408772",
+    "firebase_url": "https://fastmath-3c72a.firebaseio.com",
+    "project_id": "fastmath-3c72a",
+    "storage_bucket": "fastmath-3c72a.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:31988408772:android:5600ae4d60682ea3",
+        "android_client_info": {
+          "package_name": "com.example.oliverthurn.fastmath2"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "31988408772-g4cloh2gmk5rsdqkdrmhtpg3pnbugm1i.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBwOTCRrXr7d6oNIZTwo_8T1X3BgO3a7tY"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
