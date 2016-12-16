@@ -26,7 +26,7 @@ public class GmailLogIn extends AppCompatActivity {
     private static final int RC_SIGN_IN = 1;
     protected SignInButton googSiButton;
     protected GoogleApiClient mGoogleApiClient;
-    protected FirebaseAuth mAuth;
+    protected   FirebaseAuth mAuth;
     private static final String TAG = "MAIN_ACTIVITY";
     protected FirebaseAuth.AuthStateListener mAuthListener;
 

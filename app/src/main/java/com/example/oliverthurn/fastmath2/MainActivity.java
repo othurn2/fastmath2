@@ -9,10 +9,13 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+import com.google.firebase.auth.FirebaseAuth;
+
 public class MainActivity extends AppCompatActivity {
 
     public static boolean isMute;
     public static boolean toMute;
+    public static String uniqUID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -20,6 +23,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         isMute = false;
 
+        uniqUID = LogInMain.firstAuth.getCurrentUser().getEmail();
 
         ImageButton next = (ImageButton)findViewById(R.id.playButton);
         ImageButton ach = (ImageButton)findViewById(R.id.achievButton);
@@ -37,6 +41,13 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(MainActivity.this, AchievementsActivity.class));
+            }
+        });
+
+        prof.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(MainActivity.this, UserProfile.class));
             }
         });
 

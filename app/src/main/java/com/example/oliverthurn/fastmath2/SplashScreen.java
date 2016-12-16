@@ -84,15 +84,15 @@ public class SplashScreen extends AppCompatActivity {
 //        Log.i("MyInfoSplash", "otAppsLocY = " + otApps.getY());
 
 
-        fButton.setImageResource(R.drawable.f);
-        aButtonFast.setImageResource(R.drawable.a);
-        sButton.setImageResource(R.drawable.s);
-        tButtonFast.setImageResource(R.drawable.t);
+        fButton.setImageResource(R.drawable.flarge);
+        aButtonFast.setImageResource(R.drawable.alarge);
+        sButton.setImageResource(R.drawable.slarge);
+        tButtonFast.setImageResource(R.drawable.tlarge);
 
-        mButton.setImageResource(R.drawable.m);
-        aButtonMath.setImageResource(R.drawable.a);
-        tButtonMath.setImageResource(R.drawable.t);
-        hButton.setImageResource(R.drawable.h);
+        mButton.setImageResource(R.drawable.mlarge);
+        aButtonMath.setImageResource(R.drawable.alarge);
+        tButtonMath.setImageResource(R.drawable.tlarge);
+        hButton.setImageResource(R.drawable.hlarge);
 
 
         // Starting all letter ImageViews off the screen

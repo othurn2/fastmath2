@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
 
@@ -14,13 +15,22 @@ public class UserProfile extends AppCompatActivity {
     protected Button logoutButton;
     protected FirebaseAuth mFBAuth;
     protected FirebaseAuth.AuthStateListener mAuthListener;
+    protected Button save;
+
+    protected TextView accoutName;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_profile);
 
-        logoutButton = (Button) findViewById(R.id.logOutButton);
+        accoutName = (TextView)findViewById(R.id.userNameTVProf);
+
+        accoutName.setText(MainActivity.uniqUID);
+
+        logoutButton = (Button) findViewById(R.id.logoutButtonProf);
         mFBAuth = FirebaseAuth.getInstance();
         mAuthListener = new FirebaseAuth.AuthStateListener() {
             @Override

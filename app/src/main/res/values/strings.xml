@@ -12,4 +12,5 @@
     <string name="settingsAchieTV">Achievements</string>
     <string name="signInTitleTextView">How would you like to sign in?</string>
     <string name="fbTV">Facebook</string>
+    <string name="userNameTV">Username</string>
 </resources>
