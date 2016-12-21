@@ -130,7 +130,8 @@
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:id="@+id/buttonGrid"
-        android:layout_below="@+id/numDisplayGrid"></GridLayout>
+        android:layout_below="@+id/numDisplayGrid"
+        android:layout_marginTop="10dp"></GridLayout>
 
     <TextView
         android:layout_width="wrap_content"
@@ -142,23 +143,14 @@
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Large Text"
-        android:id="@+id/additionTV"
-        android:layout_alignParentBottom="true"
-        android:layout_marginBottom="50dp"
-        android:layout_centerInParent="true" />
-
     <GridLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:id="@+id/starGridView"
-        android:layout_above="@+id/additionTV"
-        android:layout_marginBottom="10dp"></GridLayout>
+        android:layout_marginBottom="10dp"
+        android:layout_centerInParent="true"
+        android:layout_above="@+id/additionButton"></GridLayout>
 
     <ImageButton
         android:layout_width="wrap_content"
@@ -168,6 +160,26 @@
         android:layout_alignParentLeft="true"
         android:src="@drawable/settingscog"
         android:background="#ffffff" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/additionButton"
+        android:layout_centerHorizontal="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="50dp" />
+
+    <ImageButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/deleteButton"
+        android:layout_toEndOf="@+id/additionButton"
+        android:layout_toRightOf="@+id/additionButton"
+        android:layout_alignBottom="@+id/additionButton"
+        android:background="#ffffff"
+        android:src="@drawable/delete40"
+        android:layout_marginBottom="15dp"
+        android:layout_marginLeft="20dp" />
 
 
 </RelativeLayout>

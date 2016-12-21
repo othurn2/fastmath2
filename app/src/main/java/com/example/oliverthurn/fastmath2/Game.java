@@ -6,6 +6,7 @@ import android.animation.ValueAnimator;
 import android.content.Context;
 import android.graphics.Color;
 import android.media.AudioManager;
+import android.media.Image;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -27,15 +28,19 @@ public class Game extends AppCompatActivity {
 
     private static final String TOTAL_SCORE_TEXT = "Total: ";
     private static final int NUM_COLUMNS_ROWS = 4;
-    private static final float LARGE_TEXT_SIZE = 45;
-    private static final float SMALL_TEXT_SIZE = 25;
+    public static final float LARGE_TEXT_SIZE = 45;
+    public static final float SMALL_TEXT_SIZE = 25;
     private static final int TEXT_COLOR = Color.BLACK;
     private static final String HEADER_STAR_TEXT = "x";
     private static final int TOUCH_SOUND = 1;
     private static final int LEVEL_UP_SOUND = 2;
-    private static final int GOLD_POINTS = 3;
-    private static final int SILVER_POINTS = 2;
-    private static final int BRONZE_POINTS = 1;
+    public static final int GOLD_POINTS = 3;
+    public static final int SILVER_POINTS = 2;
+    public static final int BRONZE_POINTS = 1;
+    public static int levelTracker;
+    protected static int goldCounter;
+    protected static int silverCounter;
+    protected static int bronzeCounter;
 
     /* ============================== CLASS VIEW VARIABLES ================================ */
 
@@ -47,34 +52,39 @@ public class Game extends AppCompatActivity {
     protected TextView numGoldStars;
     protected TextView numSilverStars;
     protected TextView numBronzeStars;
-    protected TextView addingDisplay;
+    protected Button addingDisplay;
+    protected ImageButton deleteButton;
     protected ImageButton settingsButton;
     protected TextView clickCounterDisplay;
     protected ImageView goldStar;
     protected ImageView silverStar;
     protected ImageView bronzeStar;
+
+
     protected static Sounds sounds;
     protected AudioManager audioManager;
 
     /* ============================ CLASS VALUE HOLDER VARIABLES ============================ */
+    protected String levelText = "Lvl:";
+    protected String scoreText;
+    protected String displayText;
+    protected String clickText;
 
     protected int highestNum;
     protected int clickCounter;
-    protected String clickText;
     protected int sinceWinCounter;
     protected int lvl;
-    private String levelText = "Lvl:";
     protected int displayNum;
     protected int score = 0;
     protected int totalScore = 0;
-    protected String scoreText;
-    protected String displayText;
+    protected int lastButtonPressedId;
+    protected int deleteCount;
+
     protected boolean twoMatch;
     protected boolean threeMatch;
     protected boolean fourMatch;
-    protected static int goldCounter;
-    protected static int silverCounter;
-    protected static int bronzeCounter;
+    protected boolean hasDelete;
+
 
     /* ================================= RESOURCE ARRAYS ==================================== */
 
@@ -100,7 +110,8 @@ public class Game extends AppCompatActivity {
         numGoldStars = (TextView)findViewById(R.id.goldTV);
         numSilverStars = (TextView)findViewById(R.id.silverTV);
         numBronzeStars = (TextView)findViewById(R.id.bronzeTV);
-        addingDisplay = (TextView)findViewById(R.id.additionTV);
+        addingDisplay = (Button)findViewById(R.id.additionButton);
+        deleteButton = (ImageButton)findViewById(R.id.deleteButton);
         settingsButton = (ImageButton)findViewById(R.id.settingsButton);
         clickCounterDisplay = (TextView)findViewById(R.id.clickCounterTV);
         starGrid = (GridLayout)findViewById(R.id.starGridView);
@@ -129,13 +140,19 @@ public class Game extends AppCompatActivity {
         createClickCounterDisplay();
         createSettingsButton();
         createStarDisplay();
+        createDeleteButton();
+
+
+        android.support.v4.app.FragmentManager fm = getSupportFragmentManager();
+        InstructionsFrag inst = new InstructionsFrag();
+        inst.show(fm, "Instructions");
 
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        if (MainActivity.isMute == true){
+        if (MainActivity.isMute){
             audioManager.setMode(AudioManager.ADJUST_MUTE);
         } else {
             audioManager.setMode(AudioManager.ADJUST_UNMUTE);
@@ -229,6 +246,7 @@ public class Game extends AppCompatActivity {
             button.setBackgroundResource(smBlockImg[a]);
             button.setTextSize(LARGE_TEXT_SIZE);
             button.setTextColor(TEXT_COLOR);
+            button.setId(i);
 
             button.setText(Integer.toString(buttonNum));
 
@@ -237,18 +255,18 @@ public class Game extends AppCompatActivity {
             button.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    lastButtonPressedId = button.getId();
                     score += Integer.parseInt(button.getText().toString());
                     addingDisplay.setText(Integer.toString(score));
-                    Log.i("Info", "was pressed");
                     clickCounter++;
                     sinceWinCounter++;
                     clickText = Integer.toString(clickCounter);
                     clickCounterDisplay.setText(clickText);
                     button.setClickable(false);
                     button.animate().alpha(0);
-                    //sounds.playSound(TOUCH_SOUND);
                     starAnimation();
                     checkForMatch();
+                    MainActivity.printLog("buttonId" + lastButtonPressedId);
 
                 }
 
@@ -292,6 +310,57 @@ public class Game extends AppCompatActivity {
         addingDisplay.setText(Integer.toString(score));
     }
 
+    public void createDeleteButton(){
+
+        deleteButton.setAlpha(0f);
+        deleteButton.setClickable(false);
+        deleteButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (hasDelete){
+                    runDeleteButton(lastButtonPressedId);
+                    MainActivity.printLog("in delete onClick" + deleteCount);
+                } else {
+                    deleteButton.setAlpha(0f);
+                    deleteButton.setClickable(false);
+                }
+            }
+        });
+    }
+
+    public void runDeleteButton(int buttonID){
+
+        if (deleteCount > 0) {
+            Button temp = (Button) buttonGrid.getChildAt(buttonID);
+            String holder = temp.getText().toString();
+            int toDel = Integer.parseInt(holder);
+            score -= toDel;
+            holder = Integer.toString(score);
+            addingDisplay.setText(holder);
+            temp.setAlpha(1f);
+            temp.setClickable(true);
+            deleteCount--;
+        } else {
+            deleteButton.setClickable(false);
+            deleteButton.setAlpha(0f);
+        }
+    }
+
+    // Need creative ways to earn deletes
+    // also need correct placement of this method to ony change when level changes
+    public void checkForDeletes(){
+
+        if (lvl > 0) {
+            deleteButton.setClickable(true);
+            deleteButton.setAlpha(1f);
+            if (lvl > 0 && lvl < 6) {
+                hasDelete = true;
+                deleteCount++;
+            } else {
+                hasDelete = false;
+            }
+        }
+    }
     /* Display for bottom score */
     public void createSettingsButton(){
         settingsButton.setOnClickListener(new View.OnClickListener() {
@@ -349,6 +418,8 @@ public class Game extends AppCompatActivity {
     /* The other place a lot of the work happens */
     public void checkForMatch() {
 
+        checkForDeletes();
+
         if (score == displayNum){
             lvl++;
             lvlDisplay.setText(levelText + lvl);
@@ -369,6 +440,7 @@ public class Game extends AppCompatActivity {
         } else if (score > displayNum){
 
             createAdditionViewAnimation(addingDisplay);
+            levelTracker = lvl;
             lvl = 0;
             lvlDisplay.setText(levelText + lvl);
             score = 0;

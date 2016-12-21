@@ -15,12 +15,15 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".Game" />
+        <activity android:name=".Game"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait"/>
         <activity android:name=".MainActivity" />
         <activity android:name=".AchievementsActivity" />
         <activity android:name=".LogInMain" />
         <activity android:name=".GmailLogIn" />
-        <activity android:name=".UserProfile"></activity>
+        <activity android:name=".UserProfile" >
+        </activity>
     </application>
 
 </manifest>

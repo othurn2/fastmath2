@@ -5,7 +5,7 @@
     <string name="silverTv">x</string>
     <string name="bronzeTV">x</string>
     <string name="topScoreTV">Total:</string>
-    <string name="achTitle">Your Achievements</string>
+    <string name="achTitle">Achievements</string>
     <string name="achStars">Star Totals</string>
     <string name="muteTV">Mute</string>
     <string name="profileSettingsTV">My Profile</string>
@@ -13,4 +13,8 @@
     <string name="signInTitleTextView">How would you like to sign in?</string>
     <string name="fbTV">Facebook</string>
     <string name="userNameTV">Username</string>
+    <string name="instructionsTV">Welcome to fast math. Press buttons in the grid that add up to the number above. The stars below the grid
+    tell you if you can add to the number in 2, 3, or 4 presses. The number of stars and levels you complete are tracked and shown in the
+    achievements screen. If your math goes over the number to add to the level is reset, but your total score keeps going. Press away from this
+    screen to play. </string>
 </resources>

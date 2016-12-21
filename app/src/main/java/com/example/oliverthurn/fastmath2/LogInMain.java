@@ -8,12 +8,17 @@ import android.view.View;
 import android.widget.Button;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 public class LogInMain extends AppCompatActivity {
     protected Button fbSignInBtn;
     protected Button gmailSignInBtn;
+
+
     public static FirebaseAuth firstAuth;
     public static  FirebaseAuth.AuthStateListener firstAuthListener;
+    public static DatabaseReference firstDBREF;
 
 
     @Override
@@ -27,10 +32,12 @@ public class LogInMain extends AppCompatActivity {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
                 if (firebaseAuth.getCurrentUser() != null) {
+                    firstDBREF = FirebaseDatabase.getInstance().getReference();
                     startActivity(new Intent(getApplicationContext(), MainActivity.class));
                 }
             }
         };
+
 
         fbSignInBtn = (Button)findViewById(R.id.fbSignInButton);
         fbSignInBtn.setOnClickListener(new View.OnClickListener() {

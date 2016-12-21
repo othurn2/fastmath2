@@ -19,6 +19,7 @@ public class Settings extends DialogFragment {
 
     protected static final String MUTE_ON = "ON";
     protected static final String MUTE_OFF = "OFF";
+    public static boolean fromSettings;
 
     protected ImageButton mute;
     protected ImageButton troph;
@@ -46,6 +47,7 @@ public class Settings extends DialogFragment {
             @Override
             public void onClick(View v) {
 
+                fromSettings = true;
                 startActivity(new Intent(rootView.getContext(), AchievementsActivity.class));
             }
         });

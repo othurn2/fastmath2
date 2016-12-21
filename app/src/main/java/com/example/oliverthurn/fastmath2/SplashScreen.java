@@ -11,7 +11,7 @@ import android.widget.ImageView;
 
 public class SplashScreen extends AppCompatActivity {
 
-    protected final float imageWidth = 200;
+    protected final float imageWidth = 250;
     protected final long  FIRST_TIME = 2000;
     protected final long SECOND_TIME = 2250;
     protected final long THIRD_TIME = 2500;

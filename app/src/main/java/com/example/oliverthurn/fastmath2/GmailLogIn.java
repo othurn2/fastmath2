@@ -21,12 +21,13 @@ import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.database.FirebaseDatabase;
 
 public class GmailLogIn extends AppCompatActivity {
     private static final int RC_SIGN_IN = 1;
     protected SignInButton googSiButton;
     protected GoogleApiClient mGoogleApiClient;
-    protected   FirebaseAuth mAuth;
+    protected FirebaseAuth mAuth;
     private static final String TAG = "MAIN_ACTIVITY";
     protected FirebaseAuth.AuthStateListener mAuthListener;
 
@@ -42,6 +43,8 @@ public class GmailLogIn extends AppCompatActivity {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
                 if (firebaseAuth.getCurrentUser() != null) {
+                    LogInMain.firstAuth = FirebaseAuth.getInstance();
+                    LogInMain.firstDBREF = FirebaseDatabase.getInstance().getReference();
                     startActivity(new Intent(getApplicationContext(), MainActivity.class));
                 }
             }
@@ -86,6 +89,10 @@ public class GmailLogIn extends AppCompatActivity {
                 // Google Sign In was successful, authenticate with Firebase
                 GoogleSignInAccount account = result.getSignInAccount();
                 firebaseAuthWithGoogle(account);
+
+
+                Toast.makeText(getApplicationContext(), "You are now signed in " , Toast.LENGTH_LONG).show();
+
                 startActivity(new Intent(GmailLogIn.this, MainActivity.class));
             } else {
                 // Google Sign In failed, update UI appropriately
