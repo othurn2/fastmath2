@@ -25,21 +25,14 @@
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="100dp" />
 
-        <TextView
+        <Button
+            android:id="@+id/fbSignInButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            android:text="@string/fbTV"
-            android:id="@+id/signInFBTV"
             android:layout_gravity="center_horizontal"
-            android:layout_marginTop="10dp" />
+            android:layout_marginTop="30dp"
+            android:layout_marginBottom="30dp" />
 
-        <Button
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Facebook"
-            android:id="@+id/fbSignInButton"
-            android:layout_gravity="center_horizontal" />
 
         <TextView
             android:layout_width="wrap_content"

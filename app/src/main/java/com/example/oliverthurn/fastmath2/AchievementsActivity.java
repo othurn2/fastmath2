@@ -15,6 +15,7 @@ import java.util.Map;
 
 public class AchievementsActivity extends AppCompatActivity {
 
+    private static final String SP_ERROR = "There was an error getting data";
     protected static TextView golds;
     protected static TextView silvers;
     protected static TextView bronzes;
@@ -37,20 +38,38 @@ public class AchievementsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_achievements);
 
-        userIDACH = (TextView)findViewById(R.id.userTVACH);
-        userIDACH.setText(LogInMain.firstAuth.getCurrentUser().getEmail());
-        userIDACH.setTextSize(Game.SMALL_TEXT_SIZE);
+        if (MainActivity.connection == true) {
+            userIDACH = (TextView) findViewById(R.id.userTVACH);
+            userIDACH.setText(MainActivity.firstAuth.getCurrentUser().getEmail());
+            userIDACH.setTextSize(Game.SMALL_TEXT_SIZE);
 
-        golds = (TextView)findViewById(R.id.goldAchTV);
-        golds.setTextSize(Game.LARGE_TEXT_SIZE);
+            golds = (TextView) findViewById(R.id.goldAchTV);
+            golds.setTextSize(Game.LARGE_TEXT_SIZE);
 
-        silvers = (TextView)findViewById(R.id.silverAchTV);
-        silvers.setTextSize(Game.LARGE_TEXT_SIZE);
+            silvers = (TextView) findViewById(R.id.silverAchTV);
+            silvers.setTextSize(Game.LARGE_TEXT_SIZE);
 
-        bronzes = (TextView)findViewById(R.id.bronzeAchTV);
-        bronzes.setTextSize(Game.LARGE_TEXT_SIZE);
+            bronzes = (TextView) findViewById(R.id.bronzeAchTV);
+            bronzes.setTextSize(Game.LARGE_TEXT_SIZE);
 
+        } else {
+            userIDACH = (TextView) findViewById(R.id.userTVACH);
+            userIDACH.setText("Current User");
+            userIDACH.setTextSize(Game.SMALL_TEXT_SIZE);
 
+            golds = (TextView) findViewById(R.id.goldAchTV);
+            golds.setTextSize(Game.LARGE_TEXT_SIZE);
+            golds.setText(MainActivity.sp.getString("Golds", SP_ERROR));
+
+            silvers = (TextView) findViewById(R.id.silverAchTV);
+            silvers.setTextSize(Game.LARGE_TEXT_SIZE);
+            silvers.setText(MainActivity.sp.getString("Silvers", SP_ERROR));
+
+            bronzes = (TextView) findViewById(R.id.bronzeAchTV);
+            bronzes.setTextSize(Game.LARGE_TEXT_SIZE);
+            bronzes.setText(MainActivity.sp.getString("Bronzes", SP_ERROR));
+
+        }
 
         // Listener for value changes to DB
         setListener = new ValueEventListener() {
@@ -93,9 +112,9 @@ public class AchievementsActivity extends AppCompatActivity {
                     } else {
 
                         // If there was no children in the DB make them and store the last scores from the game counter
-                        LogInMain.firstDBREF.child(LogInMain.firstAuth.getCurrentUser().getUid()).child("Stars").child("Gold").setValue(Game.goldCounter);
-                        LogInMain.firstDBREF.child(LogInMain.firstAuth.getCurrentUser().getUid()).child("Stars").child("Silver").setValue(Game.silverCounter);
-                        LogInMain.firstDBREF.child(LogInMain.firstAuth.getCurrentUser().getUid()).child("Stars").child("Bronze").setValue(Game.bronzeCounter);
+                        MainActivity.firstDBREF.child(MainActivity.firstAuth.getCurrentUser().getUid()).child("Stars").child("Gold").setValue(Game.goldCounter);
+                        MainActivity.firstDBREF.child(MainActivity.firstAuth.getCurrentUser().getUid()).child("Stars").child("Silver").setValue(Game.silverCounter);
+                        MainActivity.firstDBREF.child(MainActivity.firstAuth.getCurrentUser().getUid()).child("Stars").child("Bronze").setValue(Game.bronzeCounter);
 
                     }
                 } else {
@@ -127,9 +146,9 @@ public class AchievementsActivity extends AppCompatActivity {
 
                         // This may actually crash the game. If the activity was opened from the main activity without there being children in the
                         // DB there will be nothing stored in the Game.counter variables. If crash happens set these values to 0
-                        LogInMain.firstDBREF.child(LogInMain.firstAuth.getCurrentUser().getUid()).child("Stars").child("Gold").setValue(Game.goldCounter);
-                        LogInMain.firstDBREF.child(LogInMain.firstAuth.getCurrentUser().getUid()).child("Stars").child("Silver").setValue(Game.silverCounter);
-                        LogInMain.firstDBREF.child(LogInMain.firstAuth.getCurrentUser().getUid()).child("Stars").child("Bronze").setValue(Game.bronzeCounter);
+                        MainActivity.firstDBREF.child(MainActivity.firstAuth.getCurrentUser().getUid()).child("Stars").child("Gold").setValue(Game.goldCounter);
+                        MainActivity.firstDBREF.child(MainActivity.firstAuth.getCurrentUser().getUid()).child("Stars").child("Silver").setValue(Game.silverCounter);
+                        MainActivity.firstDBREF.child(MainActivity.firstAuth.getCurrentUser().getUid()).child("Stars").child("Bronze").setValue(Game.bronzeCounter);
 
                         MainActivity.printLog("setListener else");
                     }
@@ -143,9 +162,10 @@ public class AchievementsActivity extends AppCompatActivity {
 
         };
 
-        // Adding the listener to the star child of each users uniq ID
-        LogInMain.firstDBREF.child(LogInMain.firstAuth.getCurrentUser().getUid()).child("Stars").addValueEventListener(setListener);
-
+        if (MainActivity.connection == true) {
+            // Adding the listener to the star child of each users uniq ID if there was an internet connection when app started
+            MainActivity.firstDBREF.child(MainActivity.firstAuth.getCurrentUser().getUid()).child("Stars").addValueEventListener(setListener);
+        }
     }
 
     // onStop - gets the scores that were last display in the textviews converts to ints then sends them into the DB.
@@ -154,18 +174,20 @@ public class AchievementsActivity extends AppCompatActivity {
     @Override
     protected void onStop() {
 
-        loadBronzes = bronzes.getText().toString();
-        int b = Integer.parseInt(loadBronzes);
-        loadSilvers = silvers.getText().toString();
-        int s = Integer.parseInt(loadSilvers);
-        loadGolds = golds.getText().toString();
-        int g = Integer.parseInt(loadGolds);
+        if (MainActivity.connection == true) {
+            loadBronzes = bronzes.getText().toString();
+            int b = Integer.parseInt(loadBronzes);
+            loadSilvers = silvers.getText().toString();
+            int s = Integer.parseInt(loadSilvers);
+            loadGolds = golds.getText().toString();
+            int g = Integer.parseInt(loadGolds);
 
-        LogInMain.firstDBREF.child(LogInMain.firstAuth.getCurrentUser().getUid()).child("Stars").child("Gold").setValue(g);
-        LogInMain.firstDBREF.child(LogInMain.firstAuth.getCurrentUser().getUid()).child("Stars").child("Silver").setValue(s);
-        LogInMain.firstDBREF.child(LogInMain.firstAuth.getCurrentUser().getUid()).child("Stars").child("Bronze").setValue(b);
+            MainActivity.firstDBREF.child(MainActivity.firstAuth.getCurrentUser().getUid()).child("Stars").child("Gold").setValue(g);
+            MainActivity.firstDBREF.child(MainActivity.firstAuth.getCurrentUser().getUid()).child("Stars").child("Silver").setValue(s);
+            MainActivity.firstDBREF.child(MainActivity.firstAuth.getCurrentUser().getUid()).child("Stars").child("Bronze").setValue(b);
 
 
+        }
 
         super.onStop();
 

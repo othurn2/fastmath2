@@ -19,6 +19,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.util.ArrayList;
 import java.util.Random;
 
 public class Game extends AppCompatActivity {
@@ -80,10 +81,14 @@ public class Game extends AppCompatActivity {
     protected int lastButtonPressedId;
     protected int deleteCount;
 
+    protected int arrayPlace = 0;
+
     protected boolean twoMatch;
     protected boolean threeMatch;
     protected boolean fourMatch;
     protected boolean hasDelete;
+
+    protected ArrayList<Integer> buttonsPressed = new ArrayList<>();
 
 
     /* ================================= RESOURCE ARRAYS ==================================== */
@@ -131,7 +136,6 @@ public class Game extends AppCompatActivity {
         audioManager = (AudioManager)Game.this.getSystemService(Context.AUDIO_SERVICE);
 
 
-
         createNumDisplayGrid(highestNum);
         createButtonGrid(highestNum);
         createAdditionDisplay();
@@ -170,8 +174,6 @@ public class Game extends AppCompatActivity {
 
         // Replace finalDisplayNumber with displayNum finalDisplayNumber = displayNum;
         String highString = Integer.toString(high);
-
-        Log.i("Info: stringLength", "" + highString.length());
 
         if (highString.length() == 1 ){
                 digits = 1;
@@ -256,6 +258,7 @@ public class Game extends AppCompatActivity {
                 @Override
                 public void onClick(View v) {
                     lastButtonPressedId = button.getId();
+                    buttonsPressed.add(lastButtonPressedId);
                     score += Integer.parseInt(button.getText().toString());
                     addingDisplay.setText(Integer.toString(score));
                     clickCounter++;
@@ -266,7 +269,8 @@ public class Game extends AppCompatActivity {
                     button.animate().alpha(0);
                     starAnimation();
                     checkForMatch();
-                    MainActivity.printLog("buttonId" + lastButtonPressedId);
+
+
 
                 }
 
@@ -294,7 +298,6 @@ public class Game extends AppCompatActivity {
         lvlDisplay.setTextSize(SMALL_TEXT_SIZE);
         lvlDisplay.setTextColor(TEXT_COLOR);
         lvlDisplay.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
-        //levelText = levelText + ;
         lvlDisplay.setText(levelText + lvl);
 
     }
@@ -319,7 +322,7 @@ public class Game extends AppCompatActivity {
             public void onClick(View v) {
                 if (hasDelete){
                     runDeleteButton(lastButtonPressedId);
-                    MainActivity.printLog("in delete onClick" + deleteCount);
+                    MainActivity.printLog("delete count" + deleteCount);
                 } else {
                     deleteButton.setAlpha(0f);
                     deleteButton.setClickable(false);
@@ -331,15 +334,31 @@ public class Game extends AppCompatActivity {
     public void runDeleteButton(int buttonID){
 
         if (deleteCount > 0) {
-            Button temp = (Button) buttonGrid.getChildAt(buttonID);
+            deleteCount--;
+            printArrray();
+            //int b = buttonsPressed.get(arrayPlace);
+            Button temp = (Button) buttonGrid.getChildAt(lastButtonPressedId);
             String holder = temp.getText().toString();
             int toDel = Integer.parseInt(holder);
             score -= toDel;
             holder = Integer.toString(score);
             addingDisplay.setText(holder);
-            temp.setAlpha(1f);
-            temp.setClickable(true);
-            deleteCount--;
+            arrayPlace++;
+            clickCounter --;
+            clickText = Integer.toString(clickCounter);
+            clickCounterDisplay.setText(clickText);
+
+            if (deleteCount == 0){
+                //buttonsPressed.clear();
+                arrayPlace = 0;
+                temp.setAlpha(0f);
+                temp.setClickable(false);
+            } else {
+                temp.setAlpha(1f);
+                temp.setClickable(true);
+            }
+
+
         } else {
             deleteButton.setClickable(false);
             deleteButton.setAlpha(0f);
@@ -357,6 +376,7 @@ public class Game extends AppCompatActivity {
                 hasDelete = true;
                 deleteCount++;
             } else {
+                // When over level 5 this takes away the delete button when deletes are still available.
                 hasDelete = false;
             }
         }
@@ -418,10 +438,11 @@ public class Game extends AppCompatActivity {
     /* The other place a lot of the work happens */
     public void checkForMatch() {
 
-        checkForDeletes();
+
 
         if (score == displayNum){
             lvl++;
+            checkForDeletes();
             lvlDisplay.setText(levelText + lvl);
             totalScore += clickCounter;
             scoreText = TOTAL_SCORE_TEXT + Integer.toString(totalScore);
@@ -635,4 +656,30 @@ public class Game extends AppCompatActivity {
         }
     }
 
+    public void printArrray(){
+        Log.i("Arraysize", " "+buttonsPressed.size() );
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+
+        if (MainActivity.connection == false){
+
+            // If there is no internet connection all the scores are saved to the SP from the main activity and then loaded
+            // Into the textviews of the achievement activity
+
+            String g = Integer.toString(goldCounter);
+            String s = Integer.toString(silverCounter);
+            String b = Integer.toString(bronzeCounter);
+            MainActivity.printLog("gameStop gold " + g);
+            MainActivity.printLog("gameStop silver " + s);
+            MainActivity.printLog("gameStop bronze " + b);
+            MainActivity.editor.putString("Golds", g);
+            MainActivity.editor.putString("Silvers", s);
+            MainActivity.editor.putString("Bronzes", b);
+            MainActivity.editor.commit();
+        }
+    }
 }
+

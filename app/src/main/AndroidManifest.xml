@@ -1,13 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.example.oliverthurn.fastmath2">
 
+    <uses-permission android:name="android.permission.INTERNET"/>
+
     <application
+        tools:replace="android:theme"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar">
+
+        <meta-data android:name="com.facebook.sdk.ApplicationId" android:value="@string/facebook_app_id"/>
+
         <activity android:name=".SplashScreen">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -22,8 +29,13 @@
         <activity android:name=".AchievementsActivity" />
         <activity android:name=".LogInMain" />
         <activity android:name=".GmailLogIn" />
-        <activity android:name=".UserProfile" >
+        <activity android:name=".UserProfile">
+
         </activity>
+        <meta-data
+            tools:replace="android:value"
+            android:name="io.fabric.ApiKey"
+            android:value="3b5f809d51f5ae519d181c3981bd51f0a1abb14b" />
     </application>
 
 </manifest>

@@ -17,4 +17,9 @@
     tell you if you can add to the number in 2, 3, or 4 presses. The number of stars and levels you complete are tracked and shown in the
     achievements screen. If your math goes over the number to add to the level is reset, but your total score keeps going. Press away from this
     screen to play. </string>
+    <string name="facebook_application_id" translatable="false">1235389983221371</string>
+    <string name="facebook_app_id">1235389983221371</string>
+    <string name="goldach">GOLD</string>
+    <string name="silverach">SILVER</string>
+    <string name="bronzeach">BRONZE</string>
 </resources>

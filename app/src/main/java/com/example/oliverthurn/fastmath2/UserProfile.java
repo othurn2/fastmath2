@@ -36,7 +36,7 @@ public class UserProfile extends AppCompatActivity {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
                 if (firebaseAuth.getCurrentUser() == null){
-                    startActivity(new Intent(getApplicationContext(), LogInMain.class));
+                    startActivity(new Intent(getApplicationContext(), MainActivity.class));
                 }
             }
         };

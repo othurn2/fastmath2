@@ -8,10 +8,19 @@ import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.widget.ImageView;
+import com.twitter.sdk.android.Twitter;
+import com.twitter.sdk.android.core.TwitterAuthConfig;
+import io.fabric.sdk.android.Fabric;
 
 public class SplashScreen extends AppCompatActivity {
 
-    protected final float imageWidth = 250;
+    // Note: Your consumer key and secret should be obfuscated in your source code before shipping.
+    private static final String TWITTER_KEY = "fGBD8ojWxNytjnO7Y1Bg0dV6o";
+    private static final String TWITTER_SECRET = "	XSVDR0F5J9OsEgGFKa57BDVZVylLaU4KIpda1SOuIpcflRFZwa";
+    private static final float SCREEN_DP_THRESHOLD = 16.0f;
+
+
+    protected float imageWidth = 76;
     protected final long  FIRST_TIME = 2000;
     protected final long SECOND_TIME = 2250;
     protected final long THIRD_TIME = 2500;
@@ -32,6 +41,7 @@ public class SplashScreen extends AppCompatActivity {
     protected float offScreenRightX;
     protected float offScreenHeight;
     protected float offScreenLeftX;
+    protected static float scale;
 
 
     protected float firstButtonLocX;
@@ -40,6 +50,8 @@ public class SplashScreen extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        TwitterAuthConfig authConfig = new TwitterAuthConfig(TWITTER_KEY, TWITTER_SECRET);
+        Fabric.with(this, new Twitter(authConfig));
         setContentView(R.layout.activity_splash_screen);
 
 
@@ -55,11 +67,17 @@ public class SplashScreen extends AppCompatActivity {
         otApps = (ImageView) findViewById(R.id.otappsView);
 
         // Starting a DisplayMetrics to use for positioning throughout
+        scale = getResources().getDisplayMetrics().density;
+        MainActivity.printLog("scale" + scale);
+
         DisplayMetrics displayMetrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
 
-        screenWidth = displayMetrics.widthPixels;
-        screenHeight = displayMetrics.heightPixels;
+        screenWidth = (int) (displayMetrics.widthPixels);
+        screenHeight = (int) (displayMetrics.heightPixels);
+
+        // Have to multiply the image width by the scale (screens DPI)
+        imageWidth = imageWidth * scale;
 
         Log.i("MyInfoSplash", "screenWidth = " + screenWidth);
         Log.i("MyInfoSplash", "screenHeight = " + screenHeight);
@@ -69,19 +87,6 @@ public class SplashScreen extends AppCompatActivity {
         firstButtonLocY = ((screenHeight / 4) * 2 - (4 * imageWidth));
         Log.i("MyInfoSplash", "firstButLocX = " + firstButtonLocX);
         Log.i("MyInfoSplash", "firstButLocY = " + firstButtonLocY);
-
-
-
-        // Setting all buttons properties
-        // Setting the image resources for each letter ImageView
-
-//        otApps.setImageResource(R.drawable.otappsimg);
-//        otApps.setX((screenWidth / 2) - (otApps.getWidth() / 2 ));
-//        otApps.setY(((screenHeight / 3) * 2) );
-//        otApps.setAlpha(0f);
-//
-//        Log.i("MyInfoSplash", "otAppsLocX = " + otApps.getX());
-//        Log.i("MyInfoSplash", "otAppsLocY = " + otApps.getY());
 
 
         fButton.setImageResource(R.drawable.flarge);
@@ -97,9 +102,10 @@ public class SplashScreen extends AppCompatActivity {
 
         // Starting all letter ImageViews off the screen
         offScreenRightX = 0 - (imageWidth * 2);
-        offScreenLeftX = screenWidth + (fButton.getWidth() * 2);
+        offScreenLeftX = screenWidth + (imageWidth * 2);
         offScreenHeight = screenHeight / 4;  // Because there are four views on each side off the screen
-        Log.i("MyInfoSplash", "imageWidth = " + imageWidth);
+        MainActivity.printLog("imageWidth" + imageWidth);
+
 
         fButton.setX(offScreenRightX - 200);
         fButton.setY(offScreenHeight); // will be at the top left 2x ImageView width
@@ -152,7 +158,7 @@ public class SplashScreen extends AppCompatActivity {
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
-                startActivity(new Intent(getApplicationContext(), LogInMain.class));
+                startActivity(new Intent(getApplicationContext(), MainActivity.class));
             }
         });
 
@@ -167,7 +173,7 @@ public class SplashScreen extends AppCompatActivity {
         AnimatorSet animatorThreadSet = new AnimatorSet();
 
         /* Creating all the animations for FAST     *       *       *       *     *       *       *     *       *       */
-        ObjectAnimator fButtonAnimX = ObjectAnimator.ofFloat(fButton, "X", fButton.getX(), firstButtonLocX);
+        ObjectAnimator fButtonAnimX = ObjectAnimator.ofFloat(fButton, "X", fButton.getX(), firstButtonLocX );
         fButtonAnimX.setDuration(FOURTH_TIME);
         ObjectAnimator fButtonAnimY = ObjectAnimator.ofFloat(fButton, "Y", fButton.getY(), firstButtonLocY);
         fButtonAnimY.setDuration(FOURTH_TIME);
